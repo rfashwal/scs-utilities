@@ -133,6 +133,14 @@ func (c *Manager) MQHost() string {
 	return c.mqHost
 }
 
+func (c *Manager) TemperatureTopic() string {
+	return c.temperatureTopic
+}
+
+func (c *Manager) ReadingsRoutingKey() string {
+	return c.readingKey
+}
+
 func (c *Manager) RegistrationTicket() *discovery.RegistrationTicket {
 	return c.registrationTicket
 }
