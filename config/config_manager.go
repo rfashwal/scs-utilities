@@ -23,6 +23,7 @@ type Manager struct {
 	serviceDurationInSeconds int
 	ignoreLoopback           bool
 	temperatureTopic         string
+	actuatorTopic            string
 	readingKey               string
 }
 
@@ -100,6 +101,12 @@ func (c *Manager) Init() {
 		c.temperatureTopic = tempTopic
 	}
 
+	if act, err := os.LookupEnv("ACTUATOR_TOPIC"); !err {
+		c.actuatorTopic = "actuator"
+	} else {
+		c.actuatorTopic = act
+	}
+
 	if readingKey, err := os.LookupEnv("READINGS_ROUTING_KEY"); !err {
 		c.readingKey = "readings"
 	} else {
@@ -135,6 +142,10 @@ func (c *Manager) MQHost() string {
 
 func (c *Manager) TemperatureTopic() string {
 	return c.temperatureTopic
+}
+
+func (c *Manager) ActuatorTopic() string {
+	return c.actuatorTopic
 }
 
 func (c *Manager) ReadingsRoutingKey() string {
