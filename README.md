@@ -1,1 +1,1 @@
-# scs-utilities
+# utilities
