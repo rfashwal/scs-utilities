@@ -18,6 +18,7 @@ type Manager struct {
 	eurekaService            string
 	hostName                 string
 	mqHost                   string
+	mqCredentials            string
 	registrationTicket       *discovery.RegistrationTicket
 	serviceDurationInSeconds int
 	ignoreLoopback           bool
@@ -87,6 +88,12 @@ func (c *Manager) Init() {
 		c.mqHost = mqHost
 	}
 
+	if creds, err := os.LookupEnv("MQ_CREDENTIALS"); !err {
+		c.mqCredentials = "guest1:guest1"
+	} else {
+		c.mqCredentials = creds
+	}
+
 	if tempTopic, err := os.LookupEnv("TEMPERATURE_TOPIC"); !err {
 		c.temperatureTopic = "temperature"
 	} else {
@@ -132,4 +139,8 @@ func (c *Manager) RegistrationTicket() *discovery.RegistrationTicket {
 
 func (c *Manager) IgnoreLoopback() bool {
 	return c.ignoreLoopback
+}
+
+func (c *Manager) RabbitURL() string {
+	return fmt.Sprintf("amqp://%s@%s", c.mqCredentials, c.mqHost)
 }
